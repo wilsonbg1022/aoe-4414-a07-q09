@@ -21,7 +21,8 @@ import sys # argv
 
 ## Defining Constants
 La = 1 # Line loss in atmosphere
-Ll = 1 # Line loss factor
+Ll = 0.79 # Line loss factor
+c = 2.99792458e8 # speed of light
 
 ## Initialize Script Arguments
 tx_w = float('nan')
@@ -46,11 +47,11 @@ else:
         'Usage: '\
         'python3 max_bitrate.py tx_w tx_gain_db freq_hz dist_km rx_gain_db n0_j bw_hz'\
     )
-    sys.exit()
+    exit()
 
 ## Main Script
-C = tx_w * Ll * tx_gain_db * (freq_hz / (4 * math.pi * dist_km))**2 * La * rx_gain_db
+C = tx_w * Ll * tx_gain_db * ((c/freq_hz) / (4 * math.pi * dist_km*1000))**2 * La * rx_gain_db
 N = n0_j*bw_hz
-r_max = bw_hz * math.log2(1 + C / N)/10e5
+r_max = bw_hz * math.log2(1 + C / N)
 
 print(math.floor(r_max))
